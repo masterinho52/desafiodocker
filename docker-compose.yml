@@ -2,20 +2,34 @@ version: '2'
 services:
   mysql:
     container_name: my_mysql
+    # Asignamos nombre a nuestro contenedor para poder hacer referencia a él 
+    # por los otros contenedores
     restart: always
     image: mysql:5.7
+    # Usamos una imagen con MySQL 5.7
     environment:
-      MYSQL_ROOT_PASSWORD: 'secret' # TODO: Change this
+      MYSQL_ROOT_PASSWORD: 'secret' 
+      # Configuramos la contraseña de root
     ports:
       - "3306:3306"
+      # Direccionamos el puerto 'local' al puerto de nuestro contenedor
+      # para poder acceder a el
     volumes:
       - ./data:/var/lib/mysql 
-      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+      # Montar una carpeta data de nuestro host en la ruta en que MySQL 
+      # almacena la base de datos y asignamos un script a ejecutar por MySQL
+      # en la carpeta /docker-entrypoint-initdb.d/
   php:
     container_name: my_php
     restart: always
     image: ualmtorres/phalcon-apache-ubuntu
     ports:
       - "8085:80"
+      # Direccionamos el puerto 'local' al puerto de nuestro contenedor
+      # para poder acceder a el
     volumes:
       - ./html:/var/www/html 
+      # Montamos una carpeta html de nuestra pc anfitrión en la ruta en la que 
+      # el servicio php del contenedor almacena la aplicación
+  
